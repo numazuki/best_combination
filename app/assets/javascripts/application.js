@@ -14,3 +14,14 @@
 //= require activestorage
 //= require turbolinks
 //= require_tree .
+
+document.addEventListener('turbolinks:load',function(){
+  document.querySelectorAll('.delete').forEach(function(a){
+    a.addEventListener('ajax:success',function(){
+      var p = a.parentNode;
+      var div = p.closest("li");
+
+      div.style.display = 'none';
+    });
+  });
+});

@@ -7,6 +7,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @posts = @user.posts.order(id: :desc).page(params[:page]).per(5)
   end
 
   def new
@@ -26,9 +27,24 @@ class UsersController < ApplicationController
   
 
   def edit
+    @user = current_user
   end
 
   def update
+    @user = current_user
+    if @user.update(user_params)
+      flash[:success]='変更しました'      
+      redirect_to @user
+    else
+      flash[:danger]="失敗しました"
+      render :edit
+    end
+  end
+  
+  def favorites
+    @user = User.find(params[:id])
+    @favorites = @user.favorite_posts.order(id: :desc).page(params[:page]).per(5)
+   
   end
   
   private

@@ -1,0 +1,17 @@
+<% if current_user.favorite?(post) %>
+  <%= form_with(model: current_user.favorites.find_by(post_id: post.id), local: true, method: :delete) do |f| %>
+    <%= hidden_field_tag :post_id, post.id %>
+    <%= button_tag type: 'submit', class: "button-as_link" do %>
+      <i class="fa fa-heart" style="color: pink;"></i>
+    <% end %>
+    <%=post.favorites.count%>
+  <% end %>
+<% else %>
+  <%= form_with(model: current_user.favorites.build, local: true) do |f| %>
+    <%= hidden_field_tag :post_id, post.id %>
+    <%= button_tag type: 'submit', class: "button-as_link" do %>
+      <i class="far fa-heart" style="color: pink;"></i>
+    <% end %>
+    <%=post.favorites.count%>
+  <% end %>
+<% end %>

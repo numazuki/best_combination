@@ -1,0 +1,6 @@
+<%if @favorites.present?%>
+  <h3 class="text-center"><%=@user.name%>のお気に入りの組み合わせ</h3>
+  <%=render 'posts/posts', posts: @favorites%>
+<%else%>
+  <h3 class="text-center"><%=@user.name%>のお気に入りはまだありません</h3>
+<%end%>

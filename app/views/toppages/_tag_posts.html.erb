@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-between">
+  <div>
+    <%= form_tag root_url, method: :get, class: 'boards__searchForm' do %>
+      <%= select_tag :tag_id,
+                     options_from_collection_for_select(Tag.all, :id, :name, params[:tag_id]),
+                     {
+                       prompt: 'タグで絞り込み検索',
+                       onchange: 'submit(this.form);'
+                     }
+      %>
+      <%= text_field_tag :search %>
+      <%= submit_tag 'Search', :name => nil %>
+    <% end %>
+  </div>
+  <div>
+    <%=link_to '投稿ページへ',new_post_path%>
+  </div>
+</div>
+
+<div class="mt-5">
+  <h2 class="text-center">みんなの組み合わせ</h2>
+  
+  <ul class="list-unstyled mt-4">
+    <% posts.each do |post| %>
+      <li class="mb-4 border p-3">
+        <p class="tag w-sm-25"><%=post.tag.name%></p>
+        <div class="row">
+          <div class="col-sm-5 text-center">
+            <% if post.img? %>
+              <p><%= image_tag post.img.thumb.url %></p>
+            <%else%>
+              画像なし
+            <% end %>          
+          </div>
+          <div class="col-sm-7">
+            <div>
+              <a href="<%=post_path(post)%>" class="text-center">
+                <p class="shadow-sm p-3 mb-5 bg-light rounded"><%=post.sake_name%>　×　<%=post.meshi_name%></p>
+              </a>
+            </div>
+            <div class="mt-4">
+              <div class="row">
+                <div class="shadow-sm bg-light col-sm-8 p-2 d-flex align-items-center">
+                  <% if post.user.img? %>
+                    <%= image_tag post.user.img.thumb50.url,class:'rounded-circle' %>
+                  <%else%>
+                    <%= image_tag "default.jpg", :size => '50x50' %>
+                  <% end %>    
+                  <span class="ml-3 "><%= link_to post.user.name, user_path(post.user) %> </span>
+                </div>
+                <div class="mx-auto pt-2">
+                  <%if post.user == current_user%>
+                    <i class="fa fa-heart" style="color: pink;"></i> <%=post.favorites.count%>
+                    <p>
+                      <%=link_to '削除',post_path(post),method: :delete, remote:true, data: { confirm: '本当に削除してよろしいですか？' },class: 'delete' if post.user == current_user%>
+                    </p>
+                  <%else%>
+                    <p class="d-flex align-items-end"><%=render 'favorites/fav_btn',post: post%></p>
+                  <%end%>              
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    <% end %>
+    <%= paginate posts %>
+  </ul>
+</div>
+

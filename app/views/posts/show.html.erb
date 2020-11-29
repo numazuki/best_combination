@@ -1,0 +1,39 @@
+<div class="mx-3 border py-4 px-4">
+  <p class="tag w-sm-25"><%=@post.tag.name%></p>
+  <div class="row text-center">
+    <div class="col-sm-5">
+      <p>
+        <%=@post.sake_name%>
+        <%=@post.meshi_name%>        
+      </p>     
+    </div>      
+    <div class="offset-sm-2 col-sm-5">
+      <% if @post.img? %>
+        <p><%= image_tag @post.img.thumb.url %></p>
+      <%else%>
+        <p>画像なし</p>
+      <% end %>          
+    </div>
+  </div>
+  <div class="mt-3 w-75 mx-auto bg-light px-3 py-2">
+    <p class="" style="word-wrap: break-word"><%=simple_format(@post.content)%></p>
+  </div>
+  <div class="py-2 d-flex justify-content-between">
+    <div class="shadow-sm bg-light p-2 d-flex align-items-center w-75">
+      <% if @post.user.img? %>
+        <%= image_tag @post.user.img.thumb50.url,class:'rounded-circle' %>
+      <%else%>
+        <%= image_tag "default.jpg", :size => '50x50' %>
+      <% end %>    
+      <span class="ml-3 "><%= link_to @post.user.name, user_path(@post.user) %> </span>
+    </div>
+    <div class="float-right">
+      <%if @post.user == current_user%>
+        <p><i class="fa fa-heart" style="color: pink;"></i> <%=@post.favorites.count%></p>
+        <p><%=link_to '削除',post_path(@post),method: :delete,data: { confirm: '本当に削除してよろしいですか？' } if @post.user == current_user%></p>
+      <%else%>
+        <p class="d-flex align-items-end"><%=render 'favorites/fav_btn',post: @post%></p>
+      <%end%>        
+    </div>
+  </div>
+</div>
